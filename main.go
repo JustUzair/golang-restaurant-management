@@ -1,10 +1,11 @@
 package main
 
 import (
-	"os"
-
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/mongo"
+	"log"
+	"os"
 	"restaurant-management/database"
 	"restaurant-management/middleware"
 	"restaurant-management/routes"
@@ -13,6 +14,10 @@ import (
 var foodCollection *mongo.Collection = database.OpenCollection(database.Client, "food")
 
 func main() {
+	err := godotenv.Load("config.env")
+	if err != nil {
+		log.Fatalln(err)
+	}
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "3000"

@@ -2,15 +2,16 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"restaurant-management/controllers"
+	controller "restaurant-management/controllers"
 )
 
 func UserRoutes(incomingRoutes *gin.Engine) {
-	incomingRoutes.Group("/users")
+	userRoute := incomingRoutes.Group("/users")
 	{
-		incomingRoutes.GET("/", controllers.GetUsers())
-		incomingRoutes.GET("/:user_id", controllers.GetUsers())
-		incomingRoutes.GET("/users", controllers.GetUsers())
+		userRoute.GET("/", controller.GetUsers())
+		userRoute.GET("/:user_id", controller.GetUser())
+		userRoute.POST("/signup", controller.SignUp())
+		userRoute.POST("/login", controller.Login())
 
 	}
 
