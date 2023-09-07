@@ -6,7 +6,7 @@ import (
 )
 
 func FoodRoutes(incomingRoutes *gin.Engine) {
-	foodRoute := incomingRoutes.Group("/foods")
+	foodRoute := incomingRoutes.Group("/api/v1/foods")
 	{
 		foodRoute.GET("/", controller.GetFoods())
 		foodRoute.GET("/:food_id", controller.GetFood())

@@ -6,7 +6,7 @@ import (
 )
 
 func UserRoutes(incomingRoutes *gin.Engine) {
-	userRoute := incomingRoutes.Group("/users")
+	userRoute := incomingRoutes.Group("/api/v1/users")
 	{
 		userRoute.GET("/", controller.GetUsers())
 		userRoute.GET("/:user_id", controller.GetUser())

@@ -1,12 +1,19 @@
 package controllers
 
 import (
+	"fmt"
+	"log"
+
 	"github.com/gin-gonic/gin"
 )
 
 func GetUsers() gin.HandlerFunc {
+	log.Println("user route : /")
+	fmt.Println("user route : /")
 	return func(c *gin.Context) {
-
+		c.JSON(200, gin.H{
+			"status": "success",
+		})
 	}
 }
 func GetUser() gin.HandlerFunc {

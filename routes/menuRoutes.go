@@ -6,7 +6,7 @@ import (
 )
 
 func MenuRoutes(incomingRoutes *gin.Engine) {
-	menuRoute := incomingRoutes.Group("/menus")
+	menuRoute := incomingRoutes.Group("/api/v1/menus")
 	{
 		menuRoute.GET("/", controller.GetMenus())
 		menuRoute.GET("/:menu_id", controller.GetMenu())
