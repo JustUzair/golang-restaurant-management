@@ -3,17 +3,13 @@ package main
 import (
 	"log"
 	"os"
-	// "restaurant-management/controllers"
-	"restaurant-management/database"
+
 	"restaurant-management/middleware"
 	"restaurant-management/routes"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/mongo"
 )
-
-var foodCollection *mongo.Collection = database.OpenCollection(database.Client, "food")
 
 func main() {
 	err := godotenv.Load("config.env")
@@ -37,6 +33,10 @@ func main() {
 	routes.InvoiceRoutes(router)
 	routes.OrderItemRoutes(router)
 
-	router.Run(":" + port)
+	serverErr := router.Run(":" + port)
+
+	if serverErr != nil {
+		log.Fatalf("Error starting the server on port %s\n", port)
+	}
 
 }
