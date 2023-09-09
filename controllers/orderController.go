@@ -25,7 +25,7 @@ func GetOrders() gin.HandlerFunc {
 			c.JSON(errorCode, gin.H{
 				"statusCode": errorCode,
 				"status":     "error",
-				"message":    "error while listing food items...!",
+				"message":    "error while listing order items...!",
 			})
 		}
 		var orders []bson.M
@@ -47,7 +47,7 @@ func GetOrder() gin.HandlerFunc {
 		orderId := c.Param("order_id")
 		var order models.Order
 		err := collections.OrderCollection.FindOne(ctx, bson.M{"order_id": orderId}).Decode(&order)
-
+		defer cancel()
 		if err != nil {
 			errorCode := http.StatusInternalServerError
 			c.JSON(errorCode, gin.H{
@@ -154,14 +154,14 @@ func UpdateOrder() gin.HandlerFunc {
 		}
 		var updateObj primitive.D
 		if order.Table_id != nil {
-			err := collections.MenuCollection.FindOne(ctx, bson.M{"table_id": order.Table_id}).Decode(&table)
+			err := collections.OrderCollection.FindOne(ctx, bson.M{"table_id": order.Table_id}).Decode(&table)
 			defer cancel()
 			if err != nil {
 				errorCode := http.StatusInternalServerError
 				c.JSON(errorCode, gin.H{
 					"statusCode": errorCode,
 					"status":     "error",
-					"message":    "given menu_id does not exist",
+					"message":    "given table_id does not exist",
 				})
 				return
 			}
