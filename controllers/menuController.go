@@ -86,6 +86,7 @@ func CreateMenu() gin.HandlerFunc {
 				"status":     "error",
 				"message":    validationErr.Error(),
 			})
+			return
 		}
 
 		menu.Created_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))

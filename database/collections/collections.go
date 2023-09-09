@@ -10,3 +10,4 @@ var MenuCollection *mongo.Collection = database.OpenCollection(database.Client, 
 var OrderCollection *mongo.Collection = database.OpenCollection(database.Client, "order")
 var TableCollection *mongo.Collection = database.OpenCollection(database.Client, "table")
 var InvoiceCollection *mongo.Collection = database.OpenCollection(database.Client, "invoice")
+var OrderItemCollection *mongo.Collection = database.OpenCollection(database.Client, "orderItem")

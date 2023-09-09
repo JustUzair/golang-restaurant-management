@@ -25,7 +25,7 @@ func GetOrders() gin.HandlerFunc {
 			c.JSON(errorCode, gin.H{
 				"statusCode": errorCode,
 				"status":     "error",
-				"message":    "error while listing order items...!",
+				"message":    "error while listing orders...!",
 			})
 		}
 		var orders []bson.M
@@ -90,6 +90,7 @@ func CreateOrder() gin.HandlerFunc {
 				"status":     "error",
 				"message":    validationErr.Error(),
 			})
+			return
 		}
 
 		if order.Table_id != nil {

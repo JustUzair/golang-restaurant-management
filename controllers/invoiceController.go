@@ -39,6 +39,7 @@ func GetInvoices() gin.HandlerFunc {
 				"message":    "error while listing food items...!",
 			})
 		}
+		defer cancel()
 
 		var invoices []bson.M
 		if err = result.All(ctx, &invoices); err != nil {
@@ -139,6 +140,7 @@ func CreateInvoice() gin.HandlerFunc {
 				"status":     "error",
 				"message":    validationErr.Error(),
 			})
+			return
 		}
 
 		result, insertionErr := collections.InvoiceCollection.InsertOne(ctx, &invoice)
@@ -216,7 +218,7 @@ func UpdateInvoice() gin.HandlerFunc {
 			c.JSON(errorCode, gin.H{
 				"statusCode": errorCode,
 				"status":     "error",
-				"message":    "invoiceo record updation failed",
+				"message":    "invoice record updation failed",
 			})
 			return
 		}
