@@ -90,6 +90,7 @@ func CreateOrder() gin.HandlerFunc {
 				"status":     "error",
 				"message":    validationErr.Error(),
 			})
+			defer cancel()
 			return
 		}
 
@@ -203,7 +204,7 @@ func UpdateOrder() gin.HandlerFunc {
 	}
 }
 
-func OrderIemOrderCreator(order models.Order) string {
+func OrderItemOrderCreator(order models.Order) string {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 
 	order.Created_at, _ = time.Parse(time.RFC3339, time.Now().Format(time.RFC3339))

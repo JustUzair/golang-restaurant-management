@@ -135,9 +135,7 @@ func CreateOrderItem() gin.HandlerFunc {
 		})
 	}
 }
-func OrderItemOrderCreator(models.Order) string {
-	return ""
-}
+
 func UpdateOrderItem() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)

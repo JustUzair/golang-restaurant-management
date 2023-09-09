@@ -76,6 +76,7 @@ func CreateMenu() gin.HandlerFunc {
 				"status":     "error",
 				"message":    err.Error(),
 			})
+			defer cancel()
 			return
 		}
 
@@ -86,6 +87,7 @@ func CreateMenu() gin.HandlerFunc {
 				"status":     "error",
 				"message":    validationErr.Error(),
 			})
+			defer cancel()
 			return
 		}
 

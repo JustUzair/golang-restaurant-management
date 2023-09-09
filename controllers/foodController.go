@@ -122,6 +122,7 @@ func CreateFood() gin.HandlerFunc {
 				"status":     "error",
 				"message":    validationErr.Error(),
 			})
+			defer cancel()
 			return
 		}
 

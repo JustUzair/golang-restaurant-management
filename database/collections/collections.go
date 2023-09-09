@@ -5,6 +5,7 @@ import (
 	"restaurant-management/database"
 )
 
+var UserCollection *mongo.Collection = database.OpenCollection(database.Client, "user")
 var FoodCollection *mongo.Collection = database.OpenCollection(database.Client, "food")
 var MenuCollection *mongo.Collection = database.OpenCollection(database.Client, "menu")
 var OrderCollection *mongo.Collection = database.OpenCollection(database.Client, "order")
