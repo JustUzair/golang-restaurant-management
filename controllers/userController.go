@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"restaurant-management/database/collections"
@@ -28,23 +29,19 @@ func GetUsers() gin.HandlerFunc {
 		if err != nil || page < 1 {
 			page = 1
 		}
-		startIndex := (page - 1) * recordsPerPage
-		startIndex, err = strconv.Atoi(c.Query("startIndex"))
+		// startIndex := (page - 1) * recordsPerPage
+		// startIndex, err = strconv.Atoi(c.Query("startIndex"))
+
 		matchStage := bson.D{{Key: "$match", Value: bson.D{{}}}}
-		projectStage := bson.D{
-			{
-				Key: "$project", Value: bson.D{
-					{Key: "_id", Value: 0},
-					{Key: "total_count", Value: 1},
-					{Key: "user_items", Value: bson.D{{Key: "$slice", Value: []interface{}{"$data", startIndex, recordsPerPage}}}},
-				},
-			},
-		}
+		skipStage := bson.D{{Key: "$skip", Value: page - 1}}
+		limitStage := bson.D{{Key: "$limit", Value: recordsPerPage}}
+
 		result, aggregationErr := collections.UserCollection.Aggregate(ctx, mongo.Pipeline{
 			matchStage,
-			projectStage,
+			skipStage,
+			limitStage,
 		})
-		defer cancel()
+
 		if aggregationErr != nil {
 			errorCode := http.StatusInternalServerError
 			c.JSON(errorCode, gin.H{
@@ -55,16 +52,17 @@ func GetUsers() gin.HandlerFunc {
 			defer cancel()
 			return
 		}
-		var users []bson.M
-
-		if err = result.All(ctx, &users); err != nil {
+		var allUsers []bson.M
+		if err = result.All(ctx, &allUsers); err != nil {
 			log.Fatal(err)
 		}
+		fmt.Println(allUsers)
+
 		defer cancel()
 		c.JSON(http.StatusOK, gin.H{
 			"status": "success",
 			"data": gin.H{
-				"users": users,
+				"users": allUsers,
 			},
 		})
 	}
@@ -164,7 +162,7 @@ func SignUp() gin.HandlerFunc {
 		user.User_id = user.ID.Hex()
 
 		// generate jwt token
-		token, refreshToken := utils.GenerateAllTokens(*user.Email, *user.First_name, *user.Last_name)
+		token, refreshToken, err := utils.GenerateAllTokens(*user.Email, *user.First_name, *user.Last_name, user.User_id, c)
 		user.Token = &token
 		user.Refresh_Token = &refreshToken
 
@@ -232,7 +230,7 @@ func Login() gin.HandlerFunc {
 			return
 		}
 		// generate jwt token
-		token, refreshToken := utils.GenerateAllTokens(*foundUser.Email, *foundUser.First_name, *foundUser.Last_name)
+		token, refreshToken, err := utils.GenerateAllTokens(*foundUser.Email, *foundUser.First_name, *foundUser.Last_name, foundUser.User_id, c)
 		user.Token = &token
 		user.Refresh_Token = &refreshToken
 
