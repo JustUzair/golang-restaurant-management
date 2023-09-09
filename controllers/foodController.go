@@ -86,7 +86,7 @@ func GetFood() gin.HandlerFunc {
 			c.JSON(errorCode, gin.H{
 				"statusCode": errorCode,
 				"status":     "error",
-				"message":    "Internal Server Error",
+				"message":    "error occured while fetching food item",
 			})
 			return
 		}
@@ -183,8 +183,6 @@ func UpdateFood() gin.HandlerFunc {
 			return
 		}
 
-		// menuId := c.Param("menu_id")
-		// filter := bson.M{"menu_id": menuId}
 		var updateObj primitive.D
 		if food.Name != nil {
 			updateObj = append(updateObj, bson.E{Key: "name", Value: food.Name})
@@ -235,6 +233,7 @@ func UpdateFood() gin.HandlerFunc {
 				"status":     "error",
 				"message":    "food item updation failed",
 			})
+			return
 		}
 		c.JSON(http.StatusOK, gin.H{
 			"status": "success",
